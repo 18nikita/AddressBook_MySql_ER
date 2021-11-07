@@ -1,0 +1,313 @@
+#Address_Book_Service
+
+ySQL Shell 8.0.27
+
+Copyright (c) 2016, 2021, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect Nikita@localhost:3306
+Creating a session to 'Nikita@localhost:3306'
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 9
+Server version: 8.0.27 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306 ssl  SQL > show databases
+                               -> ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.0015 sec)
+--------------------------------------------------------------------------------------------------------------------------------------
+#UC1
+#Create address book service database
+
+ MySQL  localhost:3306 ssl  SQL > create database Address_Book_Service;
+Query OK, 1 row affected (0.1429 sec)
+
+ MySQL  localhost:3306 ssl  SQL > use Address_Book_Service;
+Default schema set to `Address_Book_Service`.
+Fetching table and column names from `address_book_service` for auto-completion... Press ^C to stop.
+--------------------------------------------------------------------------------------------------------------------------------------
+#UC2
+#Ability to create a Address Book Table with first andlast names, address, city,state, zip, phone numberand email as its attributes.
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > create table address_book(
+                                                     -> firstName VARCHAR(30) NOT NULL,
+                                                     -> lastName VARCHAR(30) NOT NULL,
+                                                     -> address VARCHAR(50) NOT NULL,
+                                                     -> city VARCHAR(20) NOT NULL,
+                                                     -> state VARCHAR(20) NOT NULL,
+                                                     -> zip VARCHAR(10) NOT NULL,
+                                                     -> phoneNo VARCHAR(15) NOT NULL,
+                                                     -> email VARCHAR(15) NOT NULL,
+                                                     -> PRIMARY KEY (firstName)
+                                                     -> );
+Query OK, 0 rows affected (1.7340 sec)
+ MySQL  localhost:3306 ssl  address_book_service  SQL > describe address_book;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| firstName | varchar(30) | NO   | PRI | NULL    |       |
+| lastName  | varchar(30) | NO   |     | NULL    |       |
+| address   | varchar(50) | NO   |     | NULL    |       |
+| city      | varchar(20) | NO   |     | NULL    |       |
+| state     | varchar(20) | NO   |     | NULL    |       |
+| zip       | varchar(10) | NO   |     | NULL    |       |
+| phoneNo   | varchar(15) | NO   |     | NULL    |       |
+| email     | varchar(15) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+8 rows in set (0.0495 sec)
+----------------------------------------------------------------------------------------------------------------------------------
+#UC3
+#Ability to insert new Contacts to Address Book
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > insert into address_book(firstName,lastName,address,city,state,zip,phoneNo,email) values
+                                                     -> ("Nikita", "Rajput", "Akiwat", "Kolhapur", "Maharastra","416106", "1234567891", "abc@gmail.com"),
+                                                     -> ("Soumya", "Sanadi", "Gokak", "Ghatprabha", "Karnataka", "123654", "7894561231", "xyz@gmail.com"),
+                                                     -> ("Rashmi", "Bharatdwaj", "Kothrud", "Pune", "Maharastra", "123455", "7894563697","rash@gmail.com"),
+                                                     -> ("Dhiraj", "Sisodiya", "Bagewadi", "Chikkodi", "Karnataka", "123456", "4561237895", "dhiraj@gmail.com");
+ERROR: 1406 (22001): Data too long for column 'email' at row 4
+ MySQL  localhost:3306 ssl  address_book_service  SQL > describe address_book;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| firstName | varchar(30) | NO   | PRI | NULL    |       |
+| lastName  | varchar(30) | NO   |     | NULL    |       |
+| address   | varchar(50) | NO   |     | NULL    |       |
+| city      | varchar(20) | NO   |     | NULL    |       |
+| state     | varchar(20) | NO   |     | NULL    |       |
+| zip       | varchar(10) | NO   |     | NULL    |       |
+| phoneNo   | varchar(15) | NO   |     | NULL    |       |
+| email     | varchar(15) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+8 rows in set (0.1038 sec)
+ MySQL  localhost:3306 ssl  address_book_service  SQL > ALTER TABLE address_book MODIFY email varchar(50);
+Query OK, 0 rows affected (2.0362 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  address_book_service  SQL > desc address_book;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| firstName | varchar(30) | NO   | PRI | NULL    |       |
+| lastName  | varchar(30) | NO   |     | NULL    |       |
+| address   | varchar(50) | NO   |     | NULL    |       |
+| city      | varchar(20) | NO   |     | NULL    |       |
+| state     | varchar(20) | NO   |     | NULL    |       |
+| zip       | varchar(10) | NO   |     | NULL    |       |
+| phoneNo   | varchar(15) | NO   |     | NULL    |       |
+| email     | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+8 rows in set (0.0078 sec)
+ MySQL  localhost:3306 ssl  address_book_service  SQL >  insert into address_book(firstName,lastName,address,city,state,zip,phoneNo,email) values
+                                                     ->  ("Nikita", "Rajput", "Akiwat", "Kolhapur", "Maharastra","416106", "1234567891", "abc@gmail.com"),
+                                                     ->  ("Soumya", "Sanadi", "Gokak", "Ghatprabha", "Karnataka", "123654", "7894561231", "xyz@gmail.com"),
+                                                     ->  ("Rashmi", "Bharatdwaj", "Kothrud", "Pune", "Maharastra", "123455", "7894563697","rash@gmail.com"),
+                                                     ->  ("Dhiraj", "Sisodiya", "Bagewadi", "Chikkodi", "Karnataka", "123456", "4561237895", "dhiraj@gmail.com");
+Query OK, 4 rows affected (0.1014 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  address_book_service  SQL > describe address_book;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| firstName | varchar(30) | NO   | PRI | NULL    |       |
+| lastName  | varchar(30) | NO   |     | NULL    |       |
+| address   | varchar(50) | NO   |     | NULL    |       |
+| city      | varchar(20) | NO   |     | NULL    |       |
+| state     | varchar(20) | NO   |     | NULL    |       |
+| zip       | varchar(10) | NO   |     | NULL    |       |
+| phoneNo   | varchar(15) | NO   |     | NULL    |       |
+| email     | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+8 rows in set (0.0893 sec)
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book;
++-----------+------------+----------+------------+------------+--------+------------+------------------+
+| firstName | lastName   | address  | city       | state      | zip    | phoneNo    | email            |
++-----------+------------+----------+------------+------------+--------+------------+------------------+
+| Dhiraj    | Sisodiya   | Bagewadi | Chikkodi   | Karnataka  | 123456 | 4561237895 | dhiraj@gmail.com |
+| Nikita    | Rajput     | Akiwat   | Kolhapur   | Maharastra | 416106 | 1234567891 | abc@gmail.com    |
+| Rashmi    | Bharatdwaj | Kothrud  | Pune       | Maharastra | 123455 | 7894563697 | rash@gmail.com   |
+| Soumya    | Sanadi     | Gokak    | Ghatprabha | Karnataka  | 123654 | 7894561231 | xyz@gmail.com    |
++-----------+------------+----------+------------+------------+--------+------------+------------------+
+4 rows in set (0.0006 sec)
+-------------------------------------------------------------------------------------------------------------------------------------
+#UC4
+#Ability to edit existing contact person using their name
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > update address_book
+                                                     -> set
+                                                     -> phoneNo="98765432145"
+                                                     -> where
+                                                     -> firstName="Nikita";
+Query OK, 1 row affected (0.1528 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book;
++-----------+------------+----------+------------+------------+--------+-------------+------------------+
+| firstName | lastName   | address  | city       | state      | zip    | phoneNo     | email            |
++-----------+------------+----------+------------+------------+--------+-------------+------------------+
+| Dhiraj    | Sisodiya   | Bagewadi | Chikkodi   | Karnataka  | 123456 | 4561237895  | dhiraj@gmail.com |
+| Nikita    | Rajput     | Akiwat   | Kolhapur   | Maharastra | 416106 | 98765432145 | abc@gmail.com    |
+| Rashmi    | Bharatdwaj | Kothrud  | Pune       | Maharastra | 123455 | 7894563697  | rash@gmail.com   |
+| Soumya    | Sanadi     | Gokak    | Ghatprabha | Karnataka  | 123654 | 7894561231  | xyz@gmail.com    |
++-----------+------------+----------+------------+------------+--------+-------------+------------------+
+4 rows in set (0.0471 sec)
+ MySQL  localhost:3306 ssl  address_book_service  SQL > update address_book
+                                                     -> set
+                                                     -> email="nikita@gmail"
+                                                     -> where
+                                                     -> firstName="Nikita";
+Query OK, 1 row affected (0.1321 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book;
++-----------+------------+----------+------------+------------+--------+-------------+------------------+
+| firstName | lastName   | address  | city       | state      | zip    | phoneNo     | email            |
++-----------+------------+----------+------------+------------+--------+-------------+------------------+
+| Dhiraj    | Sisodiya   | Bagewadi | Chikkodi   | Karnataka  | 123456 | 4561237895  | dhiraj@gmail.com |
+| Nikita    | Rajput     | Akiwat   | Kolhapur   | Maharastra | 416106 | 98765432145 | nikita@gmail     |
+| Rashmi    | Bharatdwaj | Kothrud  | Pune       | Maharastra | 123455 | 7894563697  | rash@gmail.com   |
+| Soumya    | Sanadi     | Gokak    | Ghatprabha | Karnataka  | 123654 | 7894561231  | xyz@gmail.com    |
++-----------+------------+----------+------------+------------+--------+-------------+------------------+
+4 rows in set (0.0008 sec)
+-------------------------------------------------------------------------------------------------------------------------------------
+#UC5
+#Ability to delete person using FirstName
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > delete from address_book
+                                                     -> where
+                                                     -> firstName="Dhiraj";
+Query OK, 1 row affected (0.1162 sec)
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book;
++-----------+------------+---------+------------+------------+--------+-------------+----------------+
+| firstName | lastName   | address | city       | state      | zip    | phoneNo     | email          |
++-----------+------------+---------+------------+------------+--------+-------------+----------------+
+| Nikita    | Rajput     | Akiwat  | Kolhapur   | Maharastra | 416106 | 98765432145 | nikita@gmail   |
+| Rashmi    | Bharatdwaj | Kothrud | Pune       | Maharastra | 123455 | 7894563697  | rash@gmail.com |
+| Soumya    | Sanadi     | Gokak   | Ghatprabha | Karnataka  | 123654 | 7894561231  | xyz@gmail.com  |
++-----------+------------+---------+------------+------------+--------+-------------+----------------+
+3 rows in set (0.0154 sec)
+-------------------------------------------------------------------------------------------------------------------------------------
+#UC6
+#Ability to Retrieve Person belonging to a City or State from the Address Book
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book
+                                                     -> where
+                                                     -> city="Pune";
++-----------+------------+---------+------+------------+--------+------------+----------------+
+| firstName | lastName   | address | city | state      | zip    | phoneNo    | email          |
++-----------+------------+---------+------+------------+--------+------------+----------------+
+| Rashmi    | Bharatdwaj | Kothrud | Pune | Maharastra | 123455 | 7894563697 | rash@gmail.com |
++-----------+------------+---------+------+------------+--------+------------+----------------+
+1 row in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book where  city="Kolhapur";
++-----------+----------+---------+----------+------------+--------+-------------+--------------+
+| firstName | lastName | address | city     | state      | zip    | phoneNo     | email        |
++-----------+----------+---------+----------+------------+--------+-------------+--------------+
+| Nikita    | Rajput   | Akiwat  | Kolhapur | Maharastra | 416106 | 98765432145 | nikita@gmail |
++-----------+----------+---------+----------+------------+--------+-------------+--------------+
+1 row in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book where  state="Maharastra";
++-----------+------------+---------+----------+------------+--------+-------------+----------------+
+| firstName | lastName   | address | city     | state      | zip    | phoneNo     | email          |
++-----------+------------+---------+----------+------------+--------+-------------+----------------+
+| Nikita    | Rajput     | Akiwat  | Kolhapur | Maharastra | 416106 | 98765432145 | nikita@gmail   |
+| Rashmi    | Bharatdwaj | Kothrud | Pune     | Maharastra | 123455 | 7894563697  | rash@gmail.com |
++-----------+------------+---------+----------+------------+--------+-------------+----------------+
+2 rows in set (0.0011 sec)
+-------------------------------------------------------------------------------------------------------------------------------------
+#UC7
+understand size of address book by city or state
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select count(city or state) from address_book;
++----------------------+
+| count(city or state) |
++----------------------+
+|                    3 |
++----------------------+
+1 row in set (0.0561 sec)
+--------------------------------------------------------------------------------------------------------------------------------------
+#UC8
+#Ability to retrieve entries sorted alphabetically by Person’s name for a given city
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select firstName,city from address_book order by firstName;
++-----------+------------+
+| firstName | city       |
++-----------+------------+
+| Nikita    | Kolhapur   |
+| Rashmi    | Pune       |
+| Soumya    | Ghatprabha |
++-----------+------------+
+3 rows in set (0.0011 sec)
+--------------------------------------------------------------------------------------------------------------------------------------
+#UC9
+#Ability to identify each Address Book with name and Type.
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > alter table address_book add type varchar(15) after lastName;
+Query OK, 0 rows affected (2.3346 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  address_book_service  SQL > update address_book set type="Family" where firstName="Nikita";
+Query OK, 1 row affected (0.0951 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  address_book_service  SQL > update address_book set type="Friends" where firstName="Rashmi";
+Query OK, 1 row affected (0.1050 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  address_book_service  SQL > update address_book set type="Professional" where firstName="Soumya";
+Query OK, 1 row affected (0.1958 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book;
++-----------+------------+--------------+---------+------------+------------+--------+-------------+----------------+
+| firstName | lastName   | type         | address | city       | state      | zip    | phoneNo     | email          |
++-----------+------------+--------------+---------+------------+------------+--------+-------------+----------------+
+| Nikita    | Rajput     | Family       | Akiwat  | Kolhapur   | Maharastra | 416106 | 98765432145 | nikita@gmail   |
+| Rashmi    | Bharatdwaj | Friends      | Kothrud | Pune       | Maharastra | 123455 | 7894563697  | rash@gmail.com |
+| Soumya    | Sanadi     | Professional | Gokak   | Ghatprabha | Karnataka  | 123654 | 7894561231  | xyz@gmail.com  |
++-----------+------------+--------------+---------+------------+------------+--------+-------------+----------------+
+3 rows in set (0.0479 sec)
+-------------------------------------------------------------------------------------------------------------------------------------
+#UC10
+# COUNT(city) AS NumberOfaddress_book FROM address_book;
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select count(type) as Number_Of_Contact_Person
+                                                     -> from address_book;
++--------------------------+
+| Number_Of_Contact_Person |
++--------------------------+
+|                        3 |              
+
+--------------------------------------------------------------------------------------------------------------------------------------#UC11
+#Ability to add person to both Friend and Family        
+                
+ MySQL  localhost:3306 ssl  address_book_service  SQL >  insert into address_book(firstName,lastName,address,city,state,zip,phoneNo,email),
+                                                     -> update address_book set type="Family" where firstName="Nikita";
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',
+update address_book set type="Family" where firstName="Nikita"' at line 1
+ MySQL  localhost:3306 ssl  address_book_service  SQL > select * from address_book;
++-----------+------------+--------------+---------+------------+------------+--------+-------------+----------------+
+| firstName | lastName   | type         | address | city       | state      | zip    | phoneNo     | email          |
++-----------+------------+--------------+---------+------------+------------+--------+-------------+----------------+
+| Nikita    | Rajput     | Family       | Akiwat  | Kolhapur   | Maharastra | 416106 | 98765432145 | nikita@gmail   |
+| Rashmi    | Bharatdwaj | Friends      | Kothrud | Pune       | Maharastra | 123455 | 7894563697  | rash@gmail.com |
+| Soumya    | Sanadi     | Professional | Gokak   | Ghatprabha | Karnataka  | 123654 | 7894561231  | xyz@gmail.com  |
++-----------+------------+--------------+---------+------------+------------+--------+-------------+----------------+
+3 rows in set (0.0009 sec)
+
+ MySQL  localhost:3306 ssl  address_book_service  SQL >
